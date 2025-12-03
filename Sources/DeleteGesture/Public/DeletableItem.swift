@@ -37,26 +37,14 @@ public struct DGDeletableItem<Content: View>: View {
     private var id = UUID()
     
     private var symbolOffset: CGFloat {
-        if #available(iOS 26, *){
-            if (offset.width + storedOffset.width) < -55 {
-                if min(measuredWidth, 500) / -(offset.width + storedOffset.width) <= 2 {
-                    return (offset.width + storedOffset.width) + 50 
-                }else{
-                    return -30 //Grundoffset, wenn Symbol sichtbar
-                }
+        if (offset.width + storedOffset.width) < -55 {
+            if min(measuredWidth, 500) / -(offset.width + storedOffset.width) <= 2 {
+                return (offset.width + storedOffset.width) + 50 
             }else{
-                return -29
+                return -30 //Grundoffset, wenn Symbol sichtbar
             }
         }else{
-            if (offset.width + storedOffset.width) < -60 {
-                if min(measuredWidth, 500) / -(offset.width + storedOffset.width) <= 2 {
-                    return (offset.width + storedOffset.width) + 50 
-                }else{
-                    return -30
-                }
-            }else{
-                return -29
-            }
+            return -29
         }
     }
     
@@ -101,17 +89,11 @@ public struct DGDeletableItem<Content: View>: View {
                     ZStack{
                         HStack{
                             Spacer()
-                            if #available(iOS 26, macOS 26, *){
-                                Capsule()
-                                    .foregroundStyle(.red)
-                                    .padding(.trailing)
-                                    .frame(maxHeight: 50)
-                                    .frame(width: abs(/*min(*/offset.width/*, 0))*/ + storedOffset.width))
-                            }else{
-                                Rectangle()
-                                    .foregroundStyle(.red)
-                                    .frame(width: abs(min(offset.width, 0)) - storedOffset.width, height: measuredHeight)
-                            }
+                            Capsule()
+                                .foregroundStyle(.red)
+                                .padding(.trailing)
+                                .frame(maxHeight: 50)
+                                .frame(width: abs(/*min(*/offset.width/*, 0))*/ + storedOffset.width))
                         }
                     }
                 }
