@@ -6,7 +6,7 @@ A delete gesture you can use everywhere.
 
 This package provides a delete gesture for iOS and macOS. You can use it everywhere with SwiftUI.
 
-Everywhere you use this Package, you have to add a ``DGDeletionStore`` as environment.
+Everywhere you use this Package, you have to add a ``DGDeletionStore`` as environment. For more Information: <doc:Example>
 
 This is the recommended way:
 
