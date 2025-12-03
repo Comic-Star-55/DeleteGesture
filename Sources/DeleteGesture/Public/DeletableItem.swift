@@ -12,12 +12,12 @@ import SwiftUI
 @available(tvOS, unavailable)
 public struct DGDeletableItem<Content: View>: View {
     ///Defines the action to execute when the Delete-Point entered
-    public var onDelete: () -> Void
+    private var onDelete: () -> Void
     
     ///The View that is deletable
-    @ViewBuilder public var content: () -> Content
+    @ViewBuilder private var content: () -> Content
     
-    public init(onDelete deleteAction: @escaping () -> Void, content view: @escaping () -> Content){
+    public init(onDelete deleteAction: @escaping () -> Void, @ViewBuilder content view: @escaping () -> Content){
         self.onDelete = deleteAction
         self.content = view
     }
@@ -34,7 +34,7 @@ public struct DGDeletableItem<Content: View>: View {
     @State private var totalDistance: CGFloat = 0
     @State private var lastDragLocation: CGPoint?
     
-    internal var id = UUID()
+    private var id = UUID()
     
     private var symbolOffset: CGFloat {
         if #available(iOS 26, *){

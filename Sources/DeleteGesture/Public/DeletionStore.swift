@@ -15,4 +15,6 @@ internal typealias DeletionStore = DGDeletionStore
 @Observable
 final public class DGDeletionStore{
     var displayedObject: UUID? = nil
+    
+    public init() {}
 }
