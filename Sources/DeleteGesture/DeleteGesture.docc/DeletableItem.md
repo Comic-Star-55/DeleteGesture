@@ -1,17 +1,18 @@
-#  ``DGDeletableItem``
-View to use in SwiftUI
+# ``DGDeletableItem``
+
+A SwiftUI view that enables delete gestures for any content.
 
 ## Overview
 
-> Important: This view requires an ``DGDeletionStore`` as environment.
-> For more Information: ``DeleteGesture``
+> Important: This view requires a ``DGDeletionStore`` in the environment.
+> For more information, see <doc:Example>.
 
-Use this View to add the deletable ability to any View
+Use this view to add delete behavior to any SwiftUI view. Wrap your content in a ``DGDeletableItem`` and provide an `onDelete` closure that handles the deletion.
 
 ```swift
-ForEach(items){item in
-    DeletableItem(onDelete: {deletItem(item)}){
-        DetailView(for: Item)
+ForEach(items) { item in
+    DGDeletableItem(onDelete: { deleteItem(item) }) {
+        DetailView(for: item)
     }
 }
 ```
