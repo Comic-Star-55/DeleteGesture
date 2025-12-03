@@ -17,6 +17,11 @@ public struct DGDeletableItem<Content: View>: View {
     ///The View that is deletable
     @ViewBuilder public var content: () -> Content
     
+    public init(onDelete deleteAction: @escaping () -> Void, content view: @escaping () -> Content){
+        self.onDelete = deleteAction
+        self.content = view
+    }
+    
     @Environment(DeletionStore.self) private var deletionStore
     @Environment(\.scenePhase) private var scenePhase
         
