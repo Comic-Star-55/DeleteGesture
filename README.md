@@ -23,6 +23,8 @@ dependencies: [
 ]
 ```
 
+or using Xcode by adding `https://github.com/Comic-Star-55/DeleteGesture.git` under `File -> Add Package Dependencies...`
+
 ## Quick Start
 
 ### 1. Set Up the Deletion Store
