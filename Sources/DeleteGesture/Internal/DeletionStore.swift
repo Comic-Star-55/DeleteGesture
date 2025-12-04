@@ -8,13 +8,11 @@ import Foundation
 
 @available(iOS 17, macOS 14, *)
 @available(tvOS, unavailable)
-internal typealias DeletionStore = DGDeletionStore
-
-@available(iOS 17, macOS 14, *)
-@available(tvOS, unavailable)
 @Observable
-final public class DGDeletionStore{
+final internal class DeletionStore{
     var displayedObject: UUID? = nil
+    
+    @MainActor static let shared = DeletionStore()
     
     public init() {}
 }

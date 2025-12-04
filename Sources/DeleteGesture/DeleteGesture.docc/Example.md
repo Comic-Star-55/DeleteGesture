@@ -2,23 +2,8 @@
 
 ## Overview
 This file shows you, how to use ``DGDeletableItem`` 
-##Examples
-```swift
-import SwiftUI
-import DeleteGesture
 
-@main
-struct DeleteGestureExampleApp: App {
-    @State private var deletionStore = DGDeletionStore()
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(deletionStore)
-        }
-    }
-}
-```
+## Examples
 
 ```swift
 struct DemoItem: Identifiable, Equatable {

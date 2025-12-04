@@ -22,7 +22,7 @@ public struct DGDeletableItem<Content: View>: View {
         self.content = view
     }
     
-    @Environment(DeletionStore.self) private var deletionStore
+//    @Environment(DeletionStore.self) private var deletionStore
     @Environment(\.scenePhase) private var scenePhase
         
     @State private var offset: CGSize = .zero
@@ -41,7 +41,7 @@ public struct DGDeletableItem<Content: View>: View {
             if min(measuredWidth, 500) / -(offset.width + storedOffset.width) <= 2 {
                 return (offset.width + storedOffset.width) + 50 
             }else{
-                return -30 //Grundoffset, wenn Symbol sichtbar
+                return -31.5 //Grundoffset, wenn Symbol sichtbar
             }
         }else{
             return -29
@@ -75,9 +75,9 @@ public struct DGDeletableItem<Content: View>: View {
                         self.measuredWidth = width
                     }
                 content()
-                    .disabled(deletionStore.displayedObject == id)
+                    .disabled(DeletionStore.shared.displayedObject == id)
                     .overlay{
-                        if deletionStore.displayedObject == id{
+                        if DeletionStore.shared.displayedObject == id{
                             Rectangle()
                                 .opacity(0.001)
                         }
@@ -151,7 +151,7 @@ public struct DGDeletableItem<Content: View>: View {
             })
             #else
             .gesture(HorizontalPanGesture(onChanged: {proxy in
-                deletionStore.displayedObject = id
+                DeletionStore.shared.displayedObject = id
                 if proxy.translation(in: proxy.view).x + storedOffset.width < 0 && totalDistance < 5{
                     offset = CGSize(width: proxy.translation(in: proxy.view).x, height: 0)
                 }else{
@@ -200,7 +200,7 @@ public struct DGDeletableItem<Content: View>: View {
                         storedOffset = CGSize(width: -65, height: 0)
                     }else{
                         storedOffset = .zero
-                        deletionStore.displayedObject = nil
+                        DeletionStore.shared.displayedObject = nil
                     }
                     lastDragLocation = nil
                     totalDistance = 0
@@ -276,8 +276,8 @@ public struct DGDeletableItem<Content: View>: View {
                 }
             }
         }
-        .onChange(of: deletionStore.displayedObject){
-            if deletionStore.displayedObject != id && deletionStore.displayedObject != nil{
+        .onChange(of: DeletionStore.shared.displayedObject){
+            if DeletionStore.shared.displayedObject != id && DeletionStore.shared.displayedObject != nil{
                 withAnimation{
                     storedOffset = .zero
                     offset = .zero
