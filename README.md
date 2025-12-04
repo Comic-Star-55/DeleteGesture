@@ -106,8 +106,6 @@ Traditional SwiftUI delete gestures using `.onDelete` are restricted to `List` a
 ## Requirements
 
 - iOS 18.0+ / macOS 15.0+
-- Swift 6.2+
-- Xcode 16+
 
 ## License
 
