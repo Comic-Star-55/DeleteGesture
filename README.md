@@ -27,28 +27,7 @@ or using Xcode by adding `https://github.com/Comic-Star-55/DeleteGesture.git` un
 
 ## Quick Start
 
-### 1. Set Up the Deletion Store
-
-Add a `DGDeletionStore` to your app's environment:
-
-```swift
-import SwiftUI
-import DeleteGesture
-
-@main
-struct MyApp: App {
-    @State private var deletionStore = DGDeletionStore()
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(deletionStore)
-        }
-    }
-}
-```
-
-### 2. Wrap Views with DGDeletableItem
+### Wrap Views with DGDeletableItem
 
 Use `DGDeletableItem` to make any view deletable:
 
