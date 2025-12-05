@@ -116,7 +116,7 @@ public struct DGDeletableItem<Content: View>: View {
             }
             #if os(macOS)
             .onHorizontalTrackpadScroll(onChanged: {event in
-                deletionStore.displayedObject = id
+                DeletionStore.shared.displayedObject = id
                 if event.scrollingDeltaX < 0 || totalDistance < 0{
                     offset = CGSize(width: min(offset.width + event.scrollingDeltaX, min(measuredWidth, 500)), height: 0)
                 }else{
@@ -144,7 +144,7 @@ public struct DGDeletableItem<Content: View>: View {
                         storedOffset = CGSize(width: -65, height: 0)
                     }else{
                         storedOffset = .zero
-                        deletionStore.displayedObject = nil
+                        DeletionStore.shared.displayedObject = nil
                     }
                     offset = .zero
                 }
