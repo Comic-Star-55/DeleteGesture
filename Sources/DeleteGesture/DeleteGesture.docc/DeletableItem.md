@@ -13,3 +13,4 @@ ForEach(items) { item in
     }
 }
 ```
+> Note: You could use ``SwiftUICore/View/onDelete(perform:)`` instead. Both returning the same result.

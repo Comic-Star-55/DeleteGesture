@@ -15,21 +15,11 @@ A SwiftUI package that provides a flexible delete gesture you can use anywhere i
 
 ## Installation
 
-Add DeleteGesture to your project using Swift Package Manager:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/Comic-Star-55/DeleteGesture.git", from: "1.0.0")
-]
-```
-
-or using Xcode by adding `https://github.com/Comic-Star-55/DeleteGesture.git` under `File -> Add Package Dependencies...`
+Add DeleteGesture to your project using Xcode by adding `https://github.com/Comic-Star-55/DeleteGesture.git` under `File -> Add Package Dependencies...`
 
 ## Quick Start
 
-### Wrap Views with DGDeletableItem
-
-Use `DGDeletableItem` to make any view deletable:
+Use `onDelete(perform:)` to make any view deletable:
 
 ```swift
 import SwiftUI
@@ -41,15 +31,14 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ForEach(items, id: \.self) { item in
-                DGDeletableItem(onDelete: {
-                    items.removeAll { $0 == item }
-                }) {
-                    Text(item)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                }
+                Text(item)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
+                    .onDelete{
+                        items.removeAll { $0 == item }
+                    }
             }
         }
         .padding()
@@ -61,15 +50,11 @@ struct ContentView: View {
 
 This package includes comprehensive [DocC documentation](Sources/DeleteGesture/DeleteGesture.docc) covering:
 
-- **DGDeletableItem** — The main view wrapper for adding delete gestures
-- **DGDeletionStore** — The shared store for coordinating delete gestures
-- **Example Usage** — Complete code examples showing integration patterns
+- **`DGDeletableItem`** — The main view wrapper for adding delete gestures
+- **`onDelete(perform:)`** — The shared store for coordinating delete gestures
+- **`Example Usage`** — Complete code examples showing integration patterns
 
-To build the documentation locally, run:
-
-```bash
-swift package generate-documentation
-```
+To build the documentation locally, use in Xcode `Command + Control + Shift + D`
 
 ## Use Case
 
