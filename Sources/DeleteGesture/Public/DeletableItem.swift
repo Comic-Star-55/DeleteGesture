@@ -10,6 +10,7 @@ import SwiftUI
 
 @available(iOS 18, macOS 15, *)
 @available(tvOS, unavailable)
+@available(visionOS, unavailable)
 public struct DGDeletableItem<Content: View>: View {
     ///Defines the action to execute when the Delete-Point entered
     private var onDelete: () -> Void
