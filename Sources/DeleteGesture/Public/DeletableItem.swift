@@ -22,10 +22,7 @@ public struct DGDeletableItem<Content: View>: View {
         self.onDelete = deleteAction
         self.content = view
     }
-    
-//    @Environment(DeletionStore.self) private var deletionStore
-    @Environment(\.scenePhase) private var scenePhase
-        
+            
     @State private var offset: CGSize = .zero
     @State private var storedOffset: CGSize = .zero
     
@@ -152,11 +149,12 @@ public struct DGDeletableItem<Content: View>: View {
             })
             #else
             .gesture(HorizontalPanGesture(onChanged: {proxy in
-                DeletionStore.shared.displayedObject = id
                 if proxy.translation(in: proxy.view).x + storedOffset.width < 0 && totalDistance < 5{
                     offset = CGSize(width: proxy.translation(in: proxy.view).x, height: 0)
+                    DeletionStore.shared.displayedObject = id
                 }else{
                     offset = .zero
+                    DeletionStore.shared.displayedObject = nil
                 }
                 
                 if min(measuredWidth, 500) / -(offset.width + storedOffset.width) <= 2 && offset.width < 0{
@@ -199,6 +197,7 @@ public struct DGDeletableItem<Content: View>: View {
                     offset = .zero
                     if proxy.translation(in: proxy.view).x + storedOffset.width < -60 && totalDistance < 5{
                         storedOffset = CGSize(width: -65, height: 0)
+                        DeletionStore.shared.displayedObject = id
                     }else{
                         storedOffset = .zero
                         DeletionStore.shared.displayedObject = nil
