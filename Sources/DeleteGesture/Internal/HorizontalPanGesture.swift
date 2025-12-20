@@ -97,17 +97,19 @@ import AppKit
 struct HorizontalTrackpadScrollModifier: ViewModifier {
     let onChanged: (NSEvent) -> Void      // Δ seit letztem Event
     let onEnded: (NSEvent) -> Void        // Aufruf wenn Scroll endet (inkl. momentum end)
+    let onReset: () -> Void               // Aufruf um einen Reset auszuführen
     @State private var monitor: Any? = nil
     @State private var accumulating = false
 
     func body(content: Content) -> some View {
         content
-            .background(TrackpadScrollHost(onChanged: onChanged, onEnded: onEnded))
+            .background(TrackpadScrollHost(onChanged: onChanged, onEnded: onEnded, onReset: onReset))
     }
 
     private struct TrackpadScrollHost: NSViewRepresentable {
         let onChanged: (NSEvent) -> Void
         let onEnded: (NSEvent) -> Void
+        let onReset: () -> Void
 
         func makeNSView(context: Context) -> NSView {
             let v = NSView(frame: .zero)
@@ -120,20 +122,24 @@ struct HorizontalTrackpadScrollModifier: ViewModifier {
         func updateNSView(_ nsView: NSView, context: Context) {}
 
         func makeCoordinator() -> Coordinator {
-            Coordinator(onChanged: onChanged, onEnded: onEnded)
+            Coordinator(onChanged: onChanged, onEnded: onEnded, onReset: onReset)
         }
 
         @MainActor class Coordinator {
             let onChanged: (NSEvent) -> Void
             let onEnded: (NSEvent) -> Void
+            let onReset: () -> Void
             var monitor: Any?
             var lastMomentumPhase: NSEvent.Phase = []
             // optional: kleines Debounce/Timer um sicherzustellen dass "ended" ausgelöst wird
             var endWorkItem: DispatchWorkItem?
 
-            init(onChanged: @escaping (NSEvent) -> Void, onEnded: @escaping (NSEvent) -> Void) {
+            var reseted: Bool = false
+            
+            init(onChanged: @escaping (NSEvent) -> Void, onEnded: @escaping (NSEvent) -> Void, onReset: @escaping () -> Void) {
                 self.onChanged = onChanged
                 self.onEnded = onEnded
+                self.onReset = onReset
             }
 
             func install(in view: NSView) {
@@ -158,25 +164,21 @@ struct HorizontalTrackpadScrollModifier: ViewModifier {
                     // event.momentumPhase hilft, Ende des Scrolls zu erkennen
                     self.endWorkItem?.cancel()
 
-                    // begin detection: momentumPhase == .began OR phase != .changed? Use momentumPhase for momentum
-                    // wir rufen onChanged jedes Mal mit ΔX auf
-//                    if dx != 0 {
-//                        self.onChanged(dx)
-//                    }
                     if ![NSEvent.Phase.began, NSEvent.Phase.changed].contains(event.momentumPhase){
-                        onChanged(event)
+                        if abs(event.scrollingDeltaX) >= abs(event.scrollingDeltaY) && !reseted{
+                            onChanged(event)
+                        }else{
+                            onReset()
+                            reseted = true
+                        }
                     }
                     // Wenn momentumPhase == .ended oder phase == .ended -> call ended immediately
                     if event.phase == .ended && event.phase != .stationary{
-                        self.onEnded(event)
-                    } /*else {
-                        // Fallback: schedule a short timeout to consider scroll ended (z. B. 120ms)
-                        let work = DispatchWorkItem { [weak self] in
-                            self?.onEnded(event)
+                        if !reseted{
+                            onEnded(event)
                         }
-                        self.endWorkItem = work
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12, execute: work)
-                    }*/
+                        reseted = false
+                    }
 
                     return event // weiter durchreichen
                 }
@@ -201,8 +203,8 @@ struct HorizontalTrackpadScrollModifier: ViewModifier {
 @available(macOS 10.15, *)
 extension View {
     func onHorizontalTrackpadScroll(onChanged: @escaping (NSEvent) -> Void,
-                                    onEnded: @escaping (NSEvent) -> Void) -> some View {
-        modifier(HorizontalTrackpadScrollModifier(onChanged: onChanged, onEnded: onEnded))
+                                    onEnded: @escaping (NSEvent) -> Void, onReset: @escaping () -> Void) -> some View {
+        modifier(HorizontalTrackpadScrollModifier(onChanged: onChanged, onEnded: onEnded, onReset: onReset))
     }
 }
 

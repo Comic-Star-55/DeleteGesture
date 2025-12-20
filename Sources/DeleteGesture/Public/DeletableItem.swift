@@ -149,6 +149,10 @@ public struct DGDeletableItem<Content: View>: View {
                     }
                     offset = .zero
                 }
+            }, onReset: {
+                storedOffset = .zero
+                offset = .zero
+                DeletionStore.shared.displayedObject = nil
             })
             #else
             .gesture(HorizontalPanGesture(onChanged: {proxy in
