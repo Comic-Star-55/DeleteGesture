@@ -105,7 +105,9 @@ public struct DGDeletableItem<Content: View>: View {
                             .animation(.linear(duration: 0.3), value: symbolOffset)
                 }
                 .onTapGesture {
-                    onDelete()
+                    withAnimation{
+                        onDelete()
+                    }
                 }
             }
             #if os(iOS)
